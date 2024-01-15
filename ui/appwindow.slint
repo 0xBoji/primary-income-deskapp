@@ -1,9 +1,8 @@
-import { Button, VerticalBox , LineEdit, StandardListView, GroupBox} from "std-widgets.slint";
+import { Button, VerticalBox, LineEdit, GridLayout, Rectangle, Text } from "std-widgets.slint";
 
 export component AppWindow inherits Window {
-
     in property <string> results: "";
-    callback divide-income(string);
+    callback divide-income(string, string);
     in-out property <bool> open_curtain;
     animate background { duration: 800ms; }
 
@@ -13,15 +12,8 @@ export component AppWindow inherits Window {
         padding: 50px;
         spacing: 25px;
         Row {
-            text := Text {
-                text: "Input message:";
-                horizontal-alignment: center;
-                font-size: 24px;
-                font-weight: 900;
-            }
-        }
-        Row {
-            input := LineEdit {
+            LineEdit {
+                id: name_input;
                 placeholder-text: "Enter your name:";
                 font-size: 16px;
                 height: 35px;
@@ -29,14 +21,23 @@ export component AppWindow inherits Window {
             }
         }
         Row {
-            button := Button {
+            LineEdit {
+                id: message_input;
+                placeholder-text: "Enter your message:";
+                font-size: 16px;
+                height: 35px;
+                horizontal-alignment: center;
+            }
+        }
+        Row {
+            Button {
                 text: "Show";
                 padding-top: 30px;
                 height: 35px;
                 primary: true;
                 clicked => {
                     root.open_curtain = !root.open_curtain;
-                    root.divide-income(input.text);
+                    root.divide-income(name_input.text, message_input.text);
                 }
             }
         }
@@ -50,24 +51,6 @@ export component AppWindow inherits Window {
                         font-size: 16px;
                         color: #000000;
                         font-weight: 500;
-                    }
-                    // Left curtain
-                    Rectangle {
-                        background: #333333;
-                        x: 0px;
-                        width: open_curtain ? 0px : (parent.width / 2);
-                        height: parent.height;
-                        animate width { duration: 250ms; easing: ease-in; }
-                    }
-
-                    // Right curtain
-                    Rectangle {
-                        background: #333333;
-                        x: open_curtain ? parent.width : (parent.width / 2);
-                        width: open_curtain ? 0px : (parent.width / 2);
-                        height: parent.height;
-                        animate width { duration: 250ms; easing: ease-in; }
-                        animate x { duration: 250ms; easing: ease-in; }
                     }
                 }
             }
